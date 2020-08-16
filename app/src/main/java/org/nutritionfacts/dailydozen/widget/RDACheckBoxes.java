@@ -17,7 +17,7 @@ import org.nutritionfacts.dailydozen.model.TweakServings;
 import org.nutritionfacts.dailydozen.task.CalculateStreakTask;
 import org.nutritionfacts.dailydozen.task.CalculateTweakStreakTask;
 import org.nutritionfacts.dailydozen.task.StreakTaskInput;
-import org.nutritionfacts.dailydozen.view.ServingCheckBox;
+import org.nutritionfacts.dailydozen.view.ServingSeekBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,7 @@ public class RDACheckBoxes extends LinearLayout {
     @BindView(R.id.food_check_boxes_container)
     protected ViewGroup vgContainer;
 
-    private List<ServingCheckBox> checkBoxes;
+    private List<ServingSeekBar> checkBoxes;
 
     private RDA rda;
     private Day day;
@@ -64,26 +64,34 @@ public class RDACheckBoxes extends LinearLayout {
     public void setServings(final Servings servings) {
         final int numServings = servings != null ? servings.getServings() : 0;
         checkBoxes = new ArrayList<>();
-        createCheckBox(checkBoxes, numServings, rda.getRecommendedAmount());
+        createSeekBar(checkBoxes, numServings, rda.getRecommendedAmount());
 
         vgContainer.removeAllViews();
 
-        for (ServingCheckBox checkBox : checkBoxes) {
-            vgContainer.addView(checkBox);
-        }
+        //for (ServingCheckBox checkBox : checkBoxes) {
+
+
+            vgContainer.addView(checkBoxes.get(0));
+
+
+       // }
     }
 
-    private ServingCheckBox createCheckBox(List<ServingCheckBox> checkBoxes, Integer currentServings, Integer maxServings) {
-        final ServingCheckBox checkBox = new ServingCheckBox(getContext());
-        checkBox.setChecked(currentServings > 0);
-        checkBox.setOnCheckedChangeListener(getOnCheckedChangeListener(checkBox));
+    private ServingSeekBar createSeekBar(List<ServingSeekBar> checkBoxes, Integer currentServings, Integer maxServings) {
+        final ServingSeekBar seekBar = new ServingSeekBar(getContext());
+       // seekBar.setChecked(currentServings > 0);
+     //   seekBar.setOnCheckedChangeListener(getOnCheckedChangeListener(seekBar));
         if (maxServings > 1)
-            checkBox.setNextServing(createCheckBox(checkBoxes, --currentServings, --maxServings));
-        checkBoxes.add(checkBox);
-        return checkBox;
+            seekBar.setNextServing(createSeekBar(checkBoxes, --currentServings, --maxServings));
+        seekBar.setMax(4);
+        seekBar.setProgress(2);
+        seekBar.setLayoutParams(new LinearLayout.LayoutParams(555, 50, 1f));
+
+        checkBoxes.add(seekBar);
+        return seekBar;
     }
 
-    private CompoundButton.OnCheckedChangeListener getOnCheckedChangeListener(final ServingCheckBox checkBox) {
+    private CompoundButton.OnCheckedChangeListener getOnCheckedChangeListener(final ServingSeekBar checkBox) {
         return new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -108,10 +116,10 @@ public class RDACheckBoxes extends LinearLayout {
 
     private Integer getNumberOfCheckedBoxes() {
         Integer numChecked = 0;
-        for (ServingCheckBox checkbox : checkBoxes) {
-            if (checkbox.isChecked()) {
-                numChecked++;
-            }
+        for (ServingSeekBar checkbox : checkBoxes) {
+          //  if (checkbox.isChecked()) {
+         //       numChecked++;
+        //    }
         }
         return numChecked;
     }
