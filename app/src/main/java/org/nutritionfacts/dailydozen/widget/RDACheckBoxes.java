@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import org.nutritionfacts.dailydozen.R;
 import org.nutritionfacts.dailydozen.RDA;
@@ -73,6 +74,8 @@ public class RDACheckBoxes extends LinearLayout {
 
             vgContainer.addView(checkBoxes.get(0));
 
+            vgContainer.addView(checkBoxes.get(0).getShowProgressTextView());
+
 
        // }
     }
@@ -81,10 +84,10 @@ public class RDACheckBoxes extends LinearLayout {
         final ServingSeekBar seekBar = new ServingSeekBar(getContext());
        // seekBar.setChecked(currentServings > 0);
      //   seekBar.setOnCheckedChangeListener(getOnCheckedChangeListener(seekBar));
-        if (maxServings > 1)
-            seekBar.setNextServing(createSeekBar(checkBoxes, --currentServings, --maxServings));
-        seekBar.setMax(4);
-        seekBar.setProgress(2);
+       // if (maxServings > 1)
+        //    seekBar.setNextServing(createSeekBar(checkBoxes, --currentServings, --maxServings));
+        seekBar.setMax(maxServings);
+        seekBar.setProgress(1);
         seekBar.setLayoutParams(new LinearLayout.LayoutParams(555, 50, 1f));
 
         checkBoxes.add(seekBar);
