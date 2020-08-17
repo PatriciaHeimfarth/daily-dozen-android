@@ -7,19 +7,21 @@ public class ServingSeekBar extends androidx.appcompat.widget.AppCompatSeekBar {
 
     private TextView showProgressTextView;
 
-    public TextView getShowProgressTextView() {
-        return showProgressTextView;
-    }
-
-    public void setShowProgressTextView(TextView showProgress) {
-        this.showProgressTextView = showProgress;
-    }
-
     public ServingSeekBar(Context context) {
         super(context);
         this.showProgressTextView = new TextView(getContext());
         this.showProgressTextView.setText("0");
 
     }
+
+    public void changeValueOnSeekBarTextView(String value){
+        this.showProgressTextView.setText(value);
+    }
+
+    public TextView getShowProgressTextView() {
+        return showProgressTextView;
+    }
+
+
 
 }
