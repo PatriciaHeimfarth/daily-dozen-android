@@ -77,7 +77,7 @@ public class RDACheckBoxes extends LinearLayout {
         servingSeekBar.setMax(maxServings * 2);
         servingSeekBar.setProgress(currentServings * 2);
         servingSeekBar.setLayoutParams(new LinearLayout.LayoutParams(555, 50, 1f));
-
+        servingSeekBar.getShowProgressTextView().setText(givePortionStringWithHalfValues(currentServings * 2));
         return servingSeekBar;
     }
 
