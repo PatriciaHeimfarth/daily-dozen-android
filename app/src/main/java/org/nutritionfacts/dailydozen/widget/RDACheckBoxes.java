@@ -74,8 +74,8 @@ public class RDACheckBoxes extends LinearLayout {
         servingSeekBar = new ServingSeekBar(getContext());
 
         servingSeekBar.setOnSeekBarChangeListener(getOnCheckedChangeListener(servingSeekBar));
-        servingSeekBar.setMax(maxServings);
-        servingSeekBar.setProgress(currentServings);
+        servingSeekBar.setMax(maxServings * 2);
+        servingSeekBar.setProgress(currentServings * 2);
         servingSeekBar.setLayoutParams(new LinearLayout.LayoutParams(555, 50, 1f));
 
         return servingSeekBar;
@@ -98,6 +98,7 @@ public class RDACheckBoxes extends LinearLayout {
                 if (rda instanceof Food) {
                     //if (isChecked) {
                     handleAddedPortionOnSeekBar();
+
                     //  } else {
                     //      handleDeletedPortionOnSeekBar();
                     //  }
@@ -117,15 +118,25 @@ public class RDACheckBoxes extends LinearLayout {
         day = Day.createDayIfDoesNotExist(day);
 
         final DDServings servings = DDServings.createServingsIfDoesNotExist(day, (Food)rda);
-        final Integer numberOfConsumedPortions = servingSeekBar.getProgress();
+        final Integer numberOfConsumedHalfPortions = servingSeekBar.getProgress();
 
-        if (servings != null && servings.getServings() != numberOfConsumedPortions) {
-            servings.setServings(numberOfConsumedPortions);
-
+        if (servings != null && servings.getServings() != numberOfConsumedHalfPortions) {
+            servings.setServings(numberOfConsumedHalfPortions / 2);
             servings.save();
             onServingsChanged();
             Timber.d("Increased Servings for %s", servings);
+
+            servingSeekBar.getShowProgressTextView().setText(
+                    givePortionStringWithHalfValues(numberOfConsumedHalfPortions));
+
         }
+    }
+
+    private String givePortionStringWithHalfValues(int numberOfConsumedHalfPortions){
+
+        if (numberOfConsumedHalfPortions % 2 == 0)
+            return String.valueOf((numberOfConsumedHalfPortions / 2));
+        return String.valueOf((numberOfConsumedHalfPortions / 2)) + ".5";
     }
 
     private void handleDeletedPortionOnSeekBar() {
