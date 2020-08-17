@@ -136,7 +136,7 @@ public class RDACheckBoxes extends LinearLayout {
         final Integer numberOfConsumedHalfPortions = servingSeekBar.getProgress();
 
         if (servings != null ) {
-            servings.setServings(numberOfConsumedHalfPortions);
+            servings.setServings(numberOfConsumedHalfPortions / 2);
 
             servings.save();
             onTweakServingsChanged();
