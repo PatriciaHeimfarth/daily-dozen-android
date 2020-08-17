@@ -95,25 +95,16 @@ public class RDACheckBoxes extends LinearLayout {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 if (rda instanceof Food) {
-                    //if (isChecked) {
-                    handleAddedPortionOnSeekBar();
-
-                    //  } else {
-                    //      handleDeletedPortionOnSeekBar();
-                    //  }
+                    handlePortionChangeOnSeekBar();
                 } else if (rda instanceof Tweak) {
-                    //  if (isChecked) {
-                    handleTweakAddedOnSeekBar();
-                    //  } else {
-                    //      handleTweakUnchecked();
-                    //   }
-                }//TODO
+                    handleTweakChangeOnSeekBar();
+                }
             }
         };
     }
 
 
-    private void handleAddedPortionOnSeekBar() {
+    private void handlePortionChangeOnSeekBar() {
         day = Day.createDayIfDoesNotExist(day);
 
         final DDServings servings = DDServings.createServingsIfDoesNotExist(day, (Food)rda);
@@ -123,7 +114,7 @@ public class RDACheckBoxes extends LinearLayout {
             servings.setServings(numberOfConsumedHalfPortions / 2);
             servings.save();
             onServingsChanged();
-            Timber.d("Increased Servings for %s", servings);
+            Timber.d("Changed Servings for %s", servings);
 
             servingSeekBar.getShowProgressTextView().setText(
                     givePortionStringWithHalfValues(numberOfConsumedHalfPortions));
@@ -138,26 +129,7 @@ public class RDACheckBoxes extends LinearLayout {
         return String.valueOf((numberOfConsumedHalfPortions / 2)) + ".5";
     }
 
-    private void handleDeletedPortionOnSeekBar() {
-        final DDServings servings = DDServings.getByDateAndFood(day, (Food) rda);
-        final Integer numberOfCheckedBoxes =  servingSeekBar.getProgress();
-
-        if (servings != null && servings.getServings() != numberOfCheckedBoxes) {
-            servings.setServings(numberOfCheckedBoxes);
-
-            if (servings.getServings() > 0) {
-                servings.save();
-                Timber.d("Decreased Servings for %s", servings);
-            } else {
-                Timber.d("Deleting %s", servings);
-                servings.delete();
-            }
-
-            onServingsChanged();
-        }
-    }
-
-    private void handleTweakAddedOnSeekBar() {
+    private void handleTweakChangeOnSeekBar() {
         day = Day.createDayIfDoesNotExist(day);
 
         final TweakServings servings = TweakServings.createServingsIfDoesNotExist(day, (Tweak)rda);
@@ -168,29 +140,10 @@ public class RDACheckBoxes extends LinearLayout {
 
             servings.save();
             onTweakServingsChanged();
-            Timber.d("Increased TweakServings for %s", servings);
+            Timber.d("Changed TweakServings for %s", servings);
 
             servingSeekBar.getShowProgressTextView().setText(
                     givePortionStringWithHalfValues(numberOfConsumedHalfPortions));
-        }
-    }
-
-    private void handleTweakUnchecked() {
-        final TweakServings servings = TweakServings.getByDateAndTweak(day, (Tweak) rda);
-        final Integer numberOfCheckedBoxes =  1;//  getNumberOfCheckedBoxes();//TODO
-
-        if (servings != null && servings.getServings() != numberOfCheckedBoxes) {
-            servings.setServings(numberOfCheckedBoxes);
-
-            if (servings.getServings() > 0) {
-                servings.save();
-                Timber.d("Decreased TweakServings for %s", servings);
-            } else {
-                Timber.d("Deleting %s", servings);
-                servings.delete();
-            }
-
-            onTweakServingsChanged();
         }
     }
 
