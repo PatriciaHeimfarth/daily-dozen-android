@@ -3,7 +3,6 @@ package org.nutritionfacts.dailydozen.widget;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 
@@ -104,7 +103,7 @@ public class RDACheckBoxes extends LinearLayout {
                     //  }
                 } else if (rda instanceof Tweak) {
                     //  if (isChecked) {
-                    handleTweakChecked();
+                    handleTweakAddedOnSeekBar();
                     //  } else {
                     //      handleTweakUnchecked();
                     //   }
@@ -158,18 +157,21 @@ public class RDACheckBoxes extends LinearLayout {
         }
     }
 
-    private void handleTweakChecked() {
+    private void handleTweakAddedOnSeekBar() {
         day = Day.createDayIfDoesNotExist(day);
 
         final TweakServings servings = TweakServings.createServingsIfDoesNotExist(day, (Tweak)rda);
-        final Integer numberOfCheckedBoxes = 1;// getNumberOfCheckedBoxes(); //TODO
+        final Integer numberOfConsumedHalfPortions = servingSeekBar.getProgress();
 
-        if (servings != null && servings.getServings() != numberOfCheckedBoxes) {
-            servings.setServings(numberOfCheckedBoxes);
+        if (servings != null && servings.getServings() != numberOfConsumedHalfPortions) {
+            servings.setServings(numberOfConsumedHalfPortions);
 
             servings.save();
             onTweakServingsChanged();
             Timber.d("Increased TweakServings for %s", servings);
+
+            servingSeekBar.getShowProgressTextView().setText(
+                    givePortionStringWithHalfValues(numberOfConsumedHalfPortions));
         }
     }
 
