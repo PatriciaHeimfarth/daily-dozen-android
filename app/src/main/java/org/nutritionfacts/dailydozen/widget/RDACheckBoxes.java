@@ -5,7 +5,7 @@ import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.SeekBar;
 
 import org.nutritionfacts.dailydozen.R;
 import org.nutritionfacts.dailydozen.RDA;
@@ -20,9 +20,6 @@ import org.nutritionfacts.dailydozen.task.CalculateTweakStreakTask;
 import org.nutritionfacts.dailydozen.task.StreakTaskInput;
 import org.nutritionfacts.dailydozen.view.ServingSeekBar;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
@@ -31,7 +28,7 @@ public class RDACheckBoxes extends LinearLayout {
     @BindView(R.id.food_check_boxes_container)
     protected ViewGroup vgContainer;
 
-    private List<ServingSeekBar> checkBoxes;
+    private ServingSeekBar servingSeekBar;
 
     private RDA rda;
     private Day day;
@@ -64,77 +61,66 @@ public class RDACheckBoxes extends LinearLayout {
 
     public void setServings(final Servings servings) {
         final int numServings = servings != null ? servings.getServings() : 0;
-        checkBoxes = new ArrayList<>();
-        createSeekBar(checkBoxes, numServings, rda.getRecommendedAmount());
+
+        ServingSeekBar seekBar = createSeekBar(numServings, rda.getRecommendedAmount());
 
         vgContainer.removeAllViews();
+        vgContainer.addView(seekBar);
+        vgContainer.addView(seekBar.getShowProgressTextView());
 
-        //for (ServingCheckBox checkBox : checkBoxes) {
-
-
-            vgContainer.addView(checkBoxes.get(0));
-
-            vgContainer.addView(checkBoxes.get(0).getShowProgressTextView());
-
-
-       // }
     }
 
-    private ServingSeekBar createSeekBar(List<ServingSeekBar> checkBoxes, Integer currentServings, Integer maxServings) {
-        final ServingSeekBar seekBar = new ServingSeekBar(getContext());
-       // seekBar.setChecked(currentServings > 0);
-     //   seekBar.setOnCheckedChangeListener(getOnCheckedChangeListener(seekBar));
-       // if (maxServings > 1)
-        //    seekBar.setNextServing(createSeekBar(checkBoxes, --currentServings, --maxServings));
-        seekBar.setMax(maxServings);
-        seekBar.setProgress(1);
-        seekBar.setLayoutParams(new LinearLayout.LayoutParams(555, 50, 1f));
+    private ServingSeekBar createSeekBar(Integer currentServings, Integer maxServings) {
+        servingSeekBar = new ServingSeekBar(getContext());
 
-        checkBoxes.add(seekBar);
-        return seekBar;
+        servingSeekBar.setOnSeekBarChangeListener(getOnCheckedChangeListener(servingSeekBar));
+        servingSeekBar.setMax(maxServings);
+        servingSeekBar.setProgress(currentServings);
+        servingSeekBar.setLayoutParams(new LinearLayout.LayoutParams(555, 50, 1f));
+
+        return servingSeekBar;
     }
 
-    private CompoundButton.OnCheckedChangeListener getOnCheckedChangeListener(final ServingSeekBar checkBox) {
-        return new CompoundButton.OnCheckedChangeListener() {
+    private SeekBar.OnSeekBarChangeListener getOnCheckedChangeListener(final ServingSeekBar seekBar) {
+        return new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                checkBox.onCheckChange(isChecked);
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
                 if (rda instanceof Food) {
-                    if (isChecked) {
-                        handleServingChecked();
-                    } else {
-                        handleServingUnchecked();
-                    }
+                    //if (isChecked) {
+                    handleAddedPortionOnSeekBar();
+                    //  } else {
+                    //      handleDeletedPortionOnSeekBar();
+                    //  }
                 } else if (rda instanceof Tweak) {
-                    if (isChecked) {
-                        handleTweakChecked();
-                    } else {
-                        handleTweakUnchecked();
-                    }
-                }
+                    //  if (isChecked) {
+                    handleTweakChecked();
+                    //  } else {
+                    //      handleTweakUnchecked();
+                    //   }
+                }//TODO
             }
         };
     }
 
-    private Integer getNumberOfCheckedBoxes() {
-        Integer numChecked = 0;
-        for (ServingSeekBar checkbox : checkBoxes) {
-          //  if (checkbox.isChecked()) {
-         //       numChecked++;
-        //    }
-        }
-        return numChecked;
-    }
 
-    private void handleServingChecked() {
+    private void handleAddedPortionOnSeekBar() {
         day = Day.createDayIfDoesNotExist(day);
 
         final DDServings servings = DDServings.createServingsIfDoesNotExist(day, (Food)rda);
-        final Integer numberOfCheckedBoxes = getNumberOfCheckedBoxes();
+        final Integer numberOfConsumedPortions = servingSeekBar.getProgress();
 
-        if (servings != null && servings.getServings() != numberOfCheckedBoxes) {
-            servings.setServings(numberOfCheckedBoxes);
+        if (servings != null && servings.getServings() != numberOfConsumedPortions) {
+            servings.setServings(numberOfConsumedPortions);
 
             servings.save();
             onServingsChanged();
@@ -142,9 +128,9 @@ public class RDACheckBoxes extends LinearLayout {
         }
     }
 
-    private void handleServingUnchecked() {
+    private void handleDeletedPortionOnSeekBar() {
         final DDServings servings = DDServings.getByDateAndFood(day, (Food) rda);
-        final Integer numberOfCheckedBoxes = getNumberOfCheckedBoxes();
+        final Integer numberOfCheckedBoxes =  servingSeekBar.getProgress();
 
         if (servings != null && servings.getServings() != numberOfCheckedBoxes) {
             servings.setServings(numberOfCheckedBoxes);
@@ -165,7 +151,7 @@ public class RDACheckBoxes extends LinearLayout {
         day = Day.createDayIfDoesNotExist(day);
 
         final TweakServings servings = TweakServings.createServingsIfDoesNotExist(day, (Tweak)rda);
-        final Integer numberOfCheckedBoxes = getNumberOfCheckedBoxes();
+        final Integer numberOfCheckedBoxes = 1;// getNumberOfCheckedBoxes(); //TODO
 
         if (servings != null && servings.getServings() != numberOfCheckedBoxes) {
             servings.setServings(numberOfCheckedBoxes);
@@ -178,7 +164,7 @@ public class RDACheckBoxes extends LinearLayout {
 
     private void handleTweakUnchecked() {
         final TweakServings servings = TweakServings.getByDateAndTweak(day, (Tweak) rda);
-        final Integer numberOfCheckedBoxes = getNumberOfCheckedBoxes();
+        final Integer numberOfCheckedBoxes =  1;//  getNumberOfCheckedBoxes();//TODO
 
         if (servings != null && servings.getServings() != numberOfCheckedBoxes) {
             servings.setServings(numberOfCheckedBoxes);
