@@ -69,11 +69,11 @@ public class RDACheckBoxes extends LinearLayout {
 
     }
 
-    private ServingSeekBar createSeekBar(Float currentServings, Integer maxServings) {
+    private ServingSeekBar createSeekBar(float currentServings, Integer maxServings) {
         servingSeekBar = new ServingSeekBar(getContext());
         servingSeekBar.setOnSeekBarChangeListener(getOnCheckedChangeListener(servingSeekBar));
         servingSeekBar.setMax(maxServings * 2);
-        servingSeekBar.setProgress((int)(currentServings * 2));
+        servingSeekBar.setProgress((int)currentServings);
         servingSeekBar.setLayoutParams(new LinearLayout.LayoutParams(555, 50, 1f));
         servingSeekBar.changeValueOnSeekBarTextView(givePortionStringWithHalfValues(currentServings / 2 ));
         return servingSeekBar;

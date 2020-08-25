@@ -147,7 +147,7 @@ public class DDServings extends TruncatableModel implements Servings {
         return servings;
     }
 
-    public static int getTotalServingsOnDate(final Day day) {
+    public static float getTotalServingsOnDate(final Day day) {
         int numServings = 0;
 
         if (day != null && day.getId() != null) {

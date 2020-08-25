@@ -89,7 +89,7 @@ public class LoadServingsHistoryTask
 
             final Day day = history.get(i);
 
-            final int totalServingsOnDate = DDServings.getTotalServingsOnDate(day);
+            final float totalServingsOnDate = DDServings.getTotalServingsOnDate(day);
 
             previousTrend = calculateTrend(previousTrend, totalServingsOnDate);
 
@@ -213,7 +213,7 @@ public class LoadServingsHistoryTask
     }
 
     // Calculates an exponentially smoothed moving average with 10% smoothing
-    private float calculateTrend(float previousTrend, int currentValue) {
+    private float calculateTrend(float previousTrend, float currentValue) {
         if (previousTrend == 0) {
             return currentValue;
         } else {

@@ -142,7 +142,7 @@ public class DailyDozenFragment extends Fragment {
     public void onEvent(FoodServingsChangedEvent event) {
         // Vitamins do not count towards the daily servings total, so we ignore when they are checked/unchecked
         if (!event.getIsVitamin() && event.getDateString().equals(day.getDateString())) {
-            final int servingsOnDate = DDServings.getTotalServingsOnDate(day);
+            final float servingsOnDate = DDServings.getTotalServingsOnDate(day);
 
             Timber.d("onEvent(FoodServingsChangedEvent): dateString [%s] foodName [%s]", event.getDateString(), event.getFoodName());
             dateHeader.setServings(servingsOnDate);

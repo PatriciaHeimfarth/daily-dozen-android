@@ -73,13 +73,13 @@ public class DateHeader extends LinearLayout {
         }
     }
 
-    public void setServings(final int servingsOnDate) {
+    public void setServings(final float servingsOnDate) {
         // Only show the star for the Daily Dozen checklist
         if (inDailyDozenMode()) {
             tvStar.setVisibility(servingsOnDate == Common.MAX_SERVINGS ? VISIBLE : GONE);
         }
 
-        tvNumServings.setText(Integer.toString(servingsOnDate));
+        tvNumServings.setText(Float.toString(servingsOnDate / 2));
     }
 
     private boolean inDailyDozenMode() {
