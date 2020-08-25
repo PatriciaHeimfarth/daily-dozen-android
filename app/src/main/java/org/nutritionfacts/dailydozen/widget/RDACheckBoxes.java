@@ -59,7 +59,7 @@ public class RDACheckBoxes extends LinearLayout {
     }
 
     public void setServings(final Servings servings) {
-        final int numServings = servings != null ? servings.getServings() : 0;
+        final float numServings = servings != null ? servings.getServings() : 0;
 
         ServingSeekBar seekBar = createSeekBar(numServings, rda.getRecommendedAmount());
 
@@ -69,14 +69,13 @@ public class RDACheckBoxes extends LinearLayout {
 
     }
 
-    private ServingSeekBar createSeekBar(Integer currentServings, Integer maxServings) {
+    private ServingSeekBar createSeekBar(Float currentServings, Integer maxServings) {
         servingSeekBar = new ServingSeekBar(getContext());
-
         servingSeekBar.setOnSeekBarChangeListener(getOnCheckedChangeListener(servingSeekBar));
         servingSeekBar.setMax(maxServings * 2);
-        servingSeekBar.setProgress(currentServings * 2);
+        servingSeekBar.setProgress((int)(currentServings * 2));
         servingSeekBar.setLayoutParams(new LinearLayout.LayoutParams(555, 50, 1f));
-        servingSeekBar.changeValueOnSeekBarTextView(givePortionStringWithHalfValues(currentServings * 2));
+        servingSeekBar.changeValueOnSeekBarTextView(givePortionStringWithHalfValues(currentServings / 2 ));
         return servingSeekBar;
     }
 
@@ -108,25 +107,25 @@ public class RDACheckBoxes extends LinearLayout {
         day = Day.createDayIfDoesNotExist(day);
 
         final DDServings servings = DDServings.createServingsIfDoesNotExist(day, (Food)rda);
-        final Integer numberOfConsumedHalfPortions = servingSeekBar.getProgress();
+        final float numberOfConsumedHalfPortions = servingSeekBar.getProgress();
 
         if (servings != null ) {
-            servings.setServings(numberOfConsumedHalfPortions / 2);
+            servings.setServings(numberOfConsumedHalfPortions);
             servings.save();
             onServingsChanged();
             Timber.d("Changed Servings for %s", servings);
 
             servingSeekBar.changeValueOnSeekBarTextView(
-                    givePortionStringWithHalfValues(numberOfConsumedHalfPortions));
+                    givePortionStringWithHalfValues(numberOfConsumedHalfPortions / 2 ));
 
         }
     }
 
-    private String givePortionStringWithHalfValues(int numberOfConsumedHalfPortions){
+    private String givePortionStringWithHalfValues(float numberOfConsumedHalfPortions){
 
-        if (numberOfConsumedHalfPortions % 2 == 0)
-            return String.valueOf((numberOfConsumedHalfPortions / 2));
-        return String.valueOf((numberOfConsumedHalfPortions / 2)) + ".5";
+       // if (numberOfConsumedHalfPortions % 2 == 0)
+            return String.valueOf( numberOfConsumedHalfPortions );
+       // return String.valueOf((numberOfConsumedHalfPortions / 2)) + ".5";
     }
 
     private void handleTweakChangeOnSeekBar() {
@@ -136,14 +135,14 @@ public class RDACheckBoxes extends LinearLayout {
         final Integer numberOfConsumedHalfPortions = servingSeekBar.getProgress();
 
         if (servings != null ) {
-            servings.setServings(numberOfConsumedHalfPortions / 2);
+            servings.setServings(numberOfConsumedHalfPortions);
 
             servings.save();
             onTweakServingsChanged();
             Timber.d("Changed TweakServings for %s", servings);
 
             servingSeekBar.changeValueOnSeekBarTextView(
-                    givePortionStringWithHalfValues(numberOfConsumedHalfPortions));
+                    givePortionStringWithHalfValues(numberOfConsumedHalfPortions / 2));
         }
     }
 

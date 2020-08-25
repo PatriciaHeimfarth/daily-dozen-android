@@ -126,8 +126,8 @@ public class BackupTask extends TaskWithContext<File, Integer, Boolean> {
     }
 
     @NonNull
-    private Map<String, Integer> createFoodServingsLookup(Day day) {
-        Map<String, Integer> foodServingsMap = new ArrayMap<>();
+    private Map<String, Float> createFoodServingsLookup(Day day) {
+        Map<String, Float> foodServingsMap = new ArrayMap<>();
 
         final Set<Food> missingFoodsOnDay = new HashSet<>(allFoods);
 
@@ -139,15 +139,15 @@ public class BackupTask extends TaskWithContext<File, Integer, Boolean> {
         }
 
         for (Food missedFood : missingFoodsOnDay) {
-            foodServingsMap.put(missedFood.getIdName(), 0);
+            foodServingsMap.put(missedFood.getIdName(), 0f);
         }
 
         return foodServingsMap;
     }
 
     @NonNull
-    private Map<String, Integer> createTweakServingsLookup(Day day) {
-        Map<String, Integer> tweakServingsMap = new ArrayMap<>();
+    private Map<String, Float> createTweakServingsLookup(Day day) {
+        Map<String, Float> tweakServingsMap = new ArrayMap<>();
 
         final Set<Tweak> missingTweaksOnDay = new HashSet<>(allTweaks);
 
@@ -157,7 +157,7 @@ public class BackupTask extends TaskWithContext<File, Integer, Boolean> {
         }
 
         for (Tweak missedTweak : missingTweaksOnDay) {
-            tweakServingsMap.put(missedTweak.getIdName(), 0);
+            tweakServingsMap.put(missedTweak.getIdName(), 0f);
         }
 
         return tweakServingsMap;

@@ -174,11 +174,11 @@ public class RestoreTask extends TaskWithContext<Uri, Integer, Boolean> {
                     dayEntries.getMorningWeight(),
                     dayEntries.getEveningWeight());
 
-            for (Map.Entry<String, Integer> entry : dayEntries.getDailyDozen().entrySet()) {
+            for (Map.Entry<String, Float> entry : dayEntries.getDailyDozen().entrySet()) {
                 DDServings.createServingsAndRecalculateStreak(day, getFoodByIdName(entry.getKey()), entry.getValue());
             }
 
-            for (Map.Entry<String, Integer> entry : dayEntries.getTweaks().entrySet()) {
+            for (Map.Entry<String, Float> entry : dayEntries.getTweaks().entrySet()) {
                 TweakServings.createServingsIfDoesNotExist(day, getTweakByIdName(entry.getKey()), entry.getValue());
             }
 

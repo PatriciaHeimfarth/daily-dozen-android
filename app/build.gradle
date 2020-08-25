@@ -29,8 +29,8 @@ android {
     buildToolsVersion '28.0.3'
 
     compileOptions {
-       sourceCompatibility JavaVersion.VERSION_1_8
-       targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
     defaultConfig {
         applicationId "org.nutritionfacts.dailydozen"
@@ -81,4 +81,4 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
 }
 
-//apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.gms.google-services'

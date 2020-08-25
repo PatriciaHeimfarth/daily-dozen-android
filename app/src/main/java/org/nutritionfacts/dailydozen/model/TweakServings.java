@@ -28,7 +28,7 @@ public class TweakServings extends TruncatableModel implements Servings {
     private Tweak tweak;
 
     @Column(name = "servings")
-    private int servings;
+    private float servings;
 
     @Column(name = "streak")
     private int streak;
@@ -49,11 +49,11 @@ public class TweakServings extends TruncatableModel implements Servings {
         return tweak;
     }
 
-    public int getServings() {
+    public float getServings() {
         return servings;
     }
 
-    public void setServings(int servings) {
+    public void setServings(float servings) {
         this.servings = servings;
     }
 
@@ -101,7 +101,7 @@ public class TweakServings extends TruncatableModel implements Servings {
         return createServingsIfDoesNotExist(day, tweak, 0);
     }
 
-    public static TweakServings createServingsIfDoesNotExist(final Day day, final Tweak tweak, final int numServings) {
+    public static TweakServings createServingsIfDoesNotExist(final Day day, final Tweak tweak, final float numServings) {
         TweakServings servings = getByDateAndTweak(day, tweak);
 
         if (servings == null) {

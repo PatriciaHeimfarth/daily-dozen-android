@@ -6,8 +6,8 @@ public class DayEntries {
     private String Date;
     private float morningWeight;
     private float eveningWeight;
-    private Map<String, Integer> dailyDozen;
-    private Map<String, Integer> tweaks;
+    private Map<String, Float> dailyDozen;
+    private Map<String, Float> tweaks;
 
     public String getDate() {
         return Date;
@@ -32,19 +32,19 @@ public class DayEntries {
         return eveningWeight;
     }
 
-    public Map<String, Integer> getDailyDozen() {
+    public Map<String, Float> getDailyDozen() {
         return dailyDozen;
     }
 
-    public void setDailyDozen(Map<String, Integer> dailyDozen) {
+    public void setDailyDozen(Map<String, Float> dailyDozen) {
         this.dailyDozen = dailyDozen;
     }
 
-    public Map<String, Integer> getTweaks() {
+    public Map<String, Float> getTweaks() {
         return tweaks;
     }
 
-    public void setTweaks(Map<String, Integer> tweaks) {
+    public void setTweaks(Map<String, Float> tweaks) {
         this.tweaks = tweaks;
     }
 }

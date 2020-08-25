@@ -29,7 +29,7 @@ public class DDServings extends TruncatableModel implements Servings {
     private Food food;
 
     @Column(name = "servings")
-    private int servings;
+    private float servings;
 
     @Column(name = "streak")
     private int streak;
@@ -50,11 +50,11 @@ public class DDServings extends TruncatableModel implements Servings {
         return food;
     }
 
-    public int getServings() {
+    public float getServings() {
         return servings;
     }
 
-    public void setServings(int servings) {
+    public void setServings(float servings) {
         this.servings = servings;
     }
 
@@ -102,7 +102,7 @@ public class DDServings extends TruncatableModel implements Servings {
         return createServingsIfDoesNotExist(day, food, 0);
     }
 
-    public static DDServings createServingsIfDoesNotExist(final Day day, final Food food, final int numServings) {
+    public static DDServings createServingsIfDoesNotExist(final Day day, final Food food, final float numServings) {
         DDServings servings = getByDateAndFood(day, food);
 
         if (servings == null) {
@@ -118,14 +118,14 @@ public class DDServings extends TruncatableModel implements Servings {
         return servings;
     }
 
-    public static DDServings createServingsAndRecalculateStreak(final Day day, final Food food, final int numServings) {
+    public static DDServings createServingsAndRecalculateStreak(final Day day, final Food food, final float numServings) {
         DDServings servings = getByDateAndFood(day, food);
 
         if (servings == null) {
             servings = new DDServings(day, food);
 
             if (numServings > 0) {
-                servings.setServings(numServings);
+                servings.setServings(numServings * 2);
                 servings.recalculateStreak();
             }
 
@@ -173,7 +173,7 @@ public class DDServings extends TruncatableModel implements Servings {
             return 0;
         }
 
-        int totalServings = 0;
+        float totalServings = 0;
 
         for (Day day : days) {
             totalServings += getTotalServingsOnDate(day);
