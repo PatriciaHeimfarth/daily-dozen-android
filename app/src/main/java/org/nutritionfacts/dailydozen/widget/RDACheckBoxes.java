@@ -122,17 +122,14 @@ public class RDACheckBoxes extends LinearLayout {
     }
 
     private String givePortionStringWithHalfValues(float numberOfConsumedHalfPortions){
-
-       // if (numberOfConsumedHalfPortions % 2 == 0)
             return String.valueOf( numberOfConsumedHalfPortions );
-       // return String.valueOf((numberOfConsumedHalfPortions / 2)) + ".5";
     }
 
     private void handleTweakChangeOnSeekBar() {
         day = Day.createDayIfDoesNotExist(day);
 
         final TweakServings servings = TweakServings.createServingsIfDoesNotExist(day, (Tweak)rda);
-        final Integer numberOfConsumedHalfPortions = servingSeekBar.getProgress();
+        final float numberOfConsumedHalfPortions = servingSeekBar.getProgress();
 
         if (servings != null ) {
             servings.setServings(numberOfConsumedHalfPortions);
